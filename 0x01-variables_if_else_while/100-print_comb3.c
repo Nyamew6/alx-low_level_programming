@@ -8,30 +8,24 @@
  */
 int main(void)
 {
-    int i, j;
+	int i, j;
 
-    for (i = 0; i <= 9; i++)
-    {
-        for (j = i + 1; j <= 9; j++)
-        {
-            int tens1 = i / 10;
-            int ones1 = i % 10;
-            int tens2 = j / 10;
-            int ones2 = j % 10;
+	for (i = 0; i <= 8; i++)
+	{
+		for (j = i + 1; j <= 9; j++)
+		{
+			putchar(i % 10 + '0');
+			putchar(j % 10 + '0');
 
-            if (tens1 != tens2 && ones1 != ones2 && i != j)
-            {
-                putchar(ones1 + '0');
-                putchar(ones2 + '0');
+			if (i == 8 && j == 9)
+				continue;
 
-                if (i != 89)
-                {
-                    putchar(',');
-                    putchar(' ');
-                }
-            }
-        }
-    }
+			putchar(',');
+			putchar(' ');
+		}
+	}
 
-    return (0);
+	putchar('\n');
+
+	return (0);
 }
