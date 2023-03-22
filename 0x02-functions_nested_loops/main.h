@@ -18,5 +18,6 @@ int fibonacci_sum_even(void);
 int fibonacci(int n);
 int num_len(int num);
 void print_num(int num);
+void print_times_table(int n);
 
 #endif /* MAIN_H */
