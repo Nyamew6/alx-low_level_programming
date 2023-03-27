@@ -1,39 +1,37 @@
-#include <stdio.h>
 /**
 
-main - Generates random valid passwords for the program 101-crackme.
-
-Return: Always 0.
+main - generates random valid passwords for 101-crackme
+Return: Always 0
 */
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 int main(void)
 {
-char password[84];
-int i = 0, sum = 0, diff_half1, diff_half2;
+int sum = 0, r;
+char c;
+    srand(time(0));
 
-srand(time(NULL));
-
-while (sum < 2772)
-{
-password[i] = rand() % 94 + 33;
-sum += password[i++];
-}
-
-diff_half1 = (sum - 2772) / 2;
-diff_half2 = (sum - 2772) / 2 + (sum - 2772) % 2;
-
-i = 0;
-while (password[i])
-{
-if (password[i] <= diff_half1)
-{
-password[i] += diff_half2;
-}
-else if (password[i] <= diff_half1 + diff_half2)
-{
-password[i] -= diff_half1;
-}
-putchar(password[i++]);
-}
-
-return (0);
+    while (sum < 2772)
+    {
+            r = rand() % 3;
+            if (r == 0)
+                    c = '0' + rand() % 10;
+            else if (r == 1)
+                    c = 'a' + rand() % 26;
+            else
+                    c = 'A' + rand() % 26;
+            putchar(c);
+            sum += c;
+    }
+    if (sum != 2772)
+    {
+            c = 2772 - sum;
+            if (c > '9' && c < 'a')
+                    c += 7;
+            else if (c > 'Z')
+                    c += 6;
+            putchar(c);
+    }
+    return (0);
 }
