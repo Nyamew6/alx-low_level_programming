@@ -1,47 +1,97 @@
 #include "main.h"
 
-int is_divisible(int num, int div);
-int is_prime_number(int n);
-
 /**
- * is_divisible - Checks if a number is divisible.
- * @num: The number to be checked.
- * @div: The divisor.
+ * strlen_no_wilds - Returns the length of a string,
+ *                   ignoring wildcard characters.
  *
- * Return: If the number is divisible - 0.
- * If the number is not divisible - 1.
+ * @str: The string to be measured.
+ *
+ * Return: The length.
  *
  * Author: Silas Mugambi
+ * Date: 2023-03-08
  */
-int is_divisible(int num, int div)
+int strlen_no_wilds(char *str)
 {
-	if (num % div == 0)
-		return (0);
+	int len = 0, index = 0;
 
-	if (div == num / 2)
-		return (1);
+	if (*(str + index))
+	{
+		if (*str != '*')
+			len++;
 
-	return (is_divisible(num, div + 1));
+		index++;
+		len += strlen_no_wilds(str + index);
+	}
+
+	return (len);
 }
 
 /**
- * is_prime_number - Checks if a number is prime.
- * @n: The number to be checked.
+ * iterate_wild - Iterates through a string located at a wildcard
+ *                until it points to a non-wildcard character.
  *
- * Return: If the integer is not prime - 0.
- * If the number is prime - 1.
- *
- * Author: Silas Mugambi
+ * @wildstr: The string to be iterated through.
  */
-int is_prime_number(int n)
+void iterate_wild(char **wildstr)
 {
-	int div = 2;
+	if (**wildstr == '*')
+	{
+		(*wildstr)++;
+		iterate_wild(wildstr);
+	}
+}
 
-	if (n <= 1)
-		return (0);
+/**
+ * postfix_match - Checks if a string str matches the postfix of
+ *                 another string potentially containing wildcards.
+ *
+ * @str: The string to be matched.
+ * @postfix: The postfix.
+ *
+ * Return: If str and postfix are identical - a pointer to the null byte
+ *                                            located at the end of postfix.
+ *         Otherwise - a pointer to the first unmatched character in postfix.
+ */
+char *postfix_match(char *str, char *postfix)
+{
+	int str_len = strlen_no_wilds(str) - 1;
+	int postfix_len = strlen_no_wilds(postfix) - 1;
 
-	if (n >= 2 && n <= 3)
+	if (*postfix == '*')
+		iterate_wild(&postfix);
+
+	if (*(str + str_len - postfix_len) == *postfix && *postfix != '\0')
+	{
+		postfix++;
+		return (postfix_match(str, postfix));
+	}
+
+	return (postfix);
+}
+
+/**
+ * wildcmp - Compares two strings, considering wildcard characters.
+ *
+ * @s1: The first string to be compared.
+ * @s2: The second string to be compared - may contain wildcards.
+ *
+ * Return: If the strings can be considered identical - 1.
+ *         Otherwise - 0.
+ */
+int wildcmp(char *s1, char *s2)
+{
+	if (*s2 == '*')
+	{
+		iterate_wild(&s2);
+		s2 = postfix_match(s1, s2);
+	}
+
+	if (*s2 == '\0')
 		return (1);
 
-	return (is_divisible(n, div));
+	if (*s1 != *s2)
+		return (0);
+
+	return (wildcmp(++s1, ++s2));
 }
