@@ -2,11 +2,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <unistd.h>
 #include <string.h>
 
-
-int _putchar(char c)
+void _puts(char *str)
 {
-	return (write(1, &c, 1));
+	int i = 0;
+
+	while (str[i])
+	{
+		_putchar(str[i]);
+		i++;
+	}
+	_putchar('\n');
 }
